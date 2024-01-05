@@ -1,0 +1,26 @@
+Sidebar
+1. Products Categories
+- Toys (board games, puzzles, action figures, dolls, stuffed animals, building blocks, remote control vehicles, and educational toys)
+- Clothing and Apparel (shirts, pants, dresses, jackets, shoes, hats, socks, and accessories)
+- Baby Products (diapers, baby clothing, baby care items (such as bottles, pacifiers & baby monitors), strollers, car seats & nursery furniture)
+- Books ( Including picture books, storybooks, educational books, activity books, and books for different age groups.)
+- School Supplies
+- Sports and Outdoor Gear (bicycles, scooters, skateboards, sports equipment (soccer, basketballs, baseball gloves), trampolines & outdoor playsets)
+- Electronics and Gadgets (Such as tablets, gaming consoles, educational electronics, headphones designed for kids, & smartwatches)
+- Furniture and Decor (Including children's beds, desks, chairs, storage solutions, room decorations, and themed bedroom sets)
+- Health and Safety Products (Such as childproofing items, baby monitors, child-sized hygiene products, and child-friendly healthcare items)
+- camping
+- travel
+
+Organization Colors
+- #fde20d (yellow)
+- #fbc210 (light yellow)
+- #c3d91e (light green)
+- #41a713 (light + dark green)
+- #000405 (dark green)
+- #ed2a79 (light pink)
+- #da1e5b (dark pink)
+- #41a713 (darkest green)
+- #f48720 (light orange)
+- #42bfeb (light blue)
+- #1b93d0 (dark blue)
