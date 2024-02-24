@@ -19,6 +19,20 @@ const routes = [
     ],
   },
   {
+    path: '/settings',
+    name: 'Settings',
+    component: DefaultLayout,
+    redirect: '/settings',
+    children: [
+      {
+        path: '/settings',
+        name: 'Settings',
+        component: () =>
+          import(/* webpackChunkName: "dashboard" */ '@/views/Settings.vue'),
+      },
+    ],
+  },
+  {
     path: '/pages',
     redirect: '/pages/404',
     name: 'Pages',
@@ -47,6 +61,19 @@ const routes = [
         path: 'register',
         name: 'Register',
         component: () => import('@/views/pages/Register'),
+      },
+    ],
+  },
+  {
+    path: '/products',
+    component: DefaultLayout,
+    redirect: '/',
+    name: 'Products',
+    children: [
+      {
+        path: '/products/men',
+        name: 'Men',
+        component: () => import('@/views/products/AllProducts'),
       },
     ],
   },

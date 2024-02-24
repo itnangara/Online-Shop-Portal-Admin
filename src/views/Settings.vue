@@ -452,6 +452,7 @@ export default {
     return {
       drawer: true,
       group: null,
+
       API_URL: 'http://127.0.0.1:8000/',
       PhotoPath: 'http://127.0.0.1:8000/Photos/',
       // PHOTO_URL:"http://127.0.0.1:8008/Photos/",

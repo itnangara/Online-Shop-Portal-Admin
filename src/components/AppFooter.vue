@@ -2,7 +2,7 @@
   <CFooter>
     <div>
       <a href="" target="_blank" class="text-decoration-none">
-        All Rights Reserved - Kidszonesa © {{ new Date().getFullYear() }}
+        All Rights Reserved - Online Shop © {{ new Date().getFullYear() }}
       </a>
     </div>
     <div class="ms-auto">

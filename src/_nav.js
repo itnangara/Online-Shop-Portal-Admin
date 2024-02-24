@@ -1,7 +1,7 @@
 export default [
   {
     component: 'CNavItem',
-    name: 'All Products',
+    name: 'Dashboard',
     to: '/dashboard',
     icon: '',
     badge: {
@@ -10,54 +10,80 @@ export default [
     },
   },
   {
-    component: 'CNavItem',
-    name: 'TrackOder',
-    // to: '/track-order',
-    icon: '',
-  },
-  {
     component: 'CNavTitle',
-    name: 'Category',
+    name: 'Management Menu',
     icon: '',
   },
   {
     component: 'CNavGroup',
     name: 'Products',
-    to: '/products',
+    // to: '/products',
     // icon: 'cil-basket',
     icon: 'fas fa-basket',
     items: [
       {
         component: 'CNavItem',
-        name: 'Toys',
-        to: '/products/toys',
+        name: 'Men',
+        to: '/products/men',
       },
       {
         component: 'CNavItem',
-        name: 'Clothes',
-        to: '/products/clothes',
+        name: 'Women',
+        to: '/products/women',
       },
       {
         component: 'CNavItem',
-        name: 'Accessories',
-        to: '/products/accessories',
+        name: 'Children',
+        to: '/products/children',
+      },
+    ],
+  },
+  {
+    component: 'CNavGroup',
+    name: 'Users',
+    to: '/users',
+    // icon: 'cil-basket',
+    icon: 'fas fa-basket',
+    items: [
+      {
+        component: 'CNavItem',
+        name: 'Admin',
+        to: '/users/admins',
+      },
+      {
+        component: 'CNavItem',
+        name: 'Customers',
+        to: '/Users/customers',
+      },
+    ],
+  },
+  {
+    component: 'CNavGroup',
+    name: 'Orders',
+    to: '/orders',
+    // icon: 'cil-basket',
+    icon: 'fas fa-basket',
+    items: [
+      {
+        component: 'CNavItem',
+        name: 'Pending',
+        to: '/orders/pending',
+      },
+      {
+        component: 'CNavItem',
+        name: 'Completed',
+        to: '/orders/completed',
       },
     ],
   },
   {
     component: 'CNavItem',
-    name: 'Other',
-    // to: '/other',
-    icon: 'cil-chart-pie',
-  },
-  {
-    component: 'CNavTitle',
     name: 'Settings',
-  },
-  {
-    component: 'CNavItem',
-    name: 'Account',
-    // to: '/account',
-    icon: 'cil-star',
+    to: '/settings',
+    icon: '',
+    badge: {
+      color: '',
+      text: '',
+    },
   },
 ]

@@ -1,5 +1,5 @@
 :root {
-    /* - #fde20d (yellow)
+  /* - #fde20d (yellow)
     - #fbc210 (light yellow)
     - #c3d91e (light green)
     - #41a713 (light + dark green)
@@ -10,33 +10,33 @@
     - #f48720 (light orange)
     - #42bfeb (light blue)
     - #1b93d0 (dark blue) */
-    --seperateTopNavColor: #80b06a; /*#2c3e50; #f48720;*/
-    --sideBarLinkHoverColor: #41a713;
-    --sideBarIconColor: #ed2a79;
-    --sideBarIconColor: #2c3e50;
-    --sideBarText: white;
-    --sideBarColor: #80b06a; /*#3d008d; /*#2c3e50;/*#36a7d1*/
-    --bodyBackground: #FCF5D8;
-    --bodyTextColor: #2c3e50; /*picture or icon, make it transparent*/
-    --topNavBackground: #79A206;
-    --topNavBackground: #fde20d;
-    --topNavBackground: #2c3e50;
-    --btnCartColor: #000000;
-    --topNavColor: white; /*navbar contents colors e.g. cart, menu*/
-    --topBarLinkHoverBackground: #9ABA00;
-    --topBarLinkHoverBackground: #fde20d;
-    --splashTextColor: #FF6866;
-    --cartBackground: #001;
-    --cartTitleBackground: #335;
-    --cartFooterBackground: #2c3e50;
-    --spashBackground: #2c3e50; /*#390D04;*/
-    --splashTextShadow: #2c3e50;/*#200;*/
-    --cardTextColor: #2c3e50; /*#280D14;*/
-    --cardBackground: #FAF2C3;
-    /* --unusedCardColor: #F8ED94; */
-    --cardBorder: #F6E57B;
-    --cardHeaderBackground: #D4D600;
-    --cardHeaderBackground: #fde20d;
-    --dashboardFooterBackground: #D4D600;
-    --dashboardFooterBackground: #d17d7b;
+  --seperateTopNavColor: #80b06a; /*#2c3e50; #f48720;*/
+  --sideBarLinkHoverColor: #41a713;
+  --sideBarIconColor: #ed2a79;
+  --sideBarIconColor: #2c3e50;
+  --sideBarText: white;
+  --sideBarColor: #80b06a; /*#3d008d; /*#2c3e50;/*#36a7d1*/
+  --bodyBackground: #fcf5d8;
+  --bodyTextColor: #2c3e50; /*picture or icon, make it transparent*/
+  --topNavBackground: #79a206;
+  --topNavBackground: #fde20d;
+  --topNavBackground: #2c3e50;
+  --btnCartColor: #000000;
+  --topNavColor: white; /*navbar contents colors e.g. cart, menu*/
+  --topBarLinkHoverBackground: #9aba00;
+  --topBarLinkHoverBackground: #fde20d;
+  --splashTextColor: #ff6866;
+  --cartBackground: #001;
+  --cartTitleBackground: #335;
+  --cartFooterBackground: #2c3e50;
+  --spashBackground: #2c3e50; /*#390D04;*/
+  --splashTextShadow: #2c3e50; /*#200;*/
+  --cardTextColor: #2c3e50; /*#280D14;*/
+  --cardBackground: #faf2c3;
+  /* --unusedCardColor: #F8ED94; */
+  --cardBorder: #f6e57b;
+  --cardHeaderBackground: #d4d600;
+  --cardHeaderBackground: #fde20d;
+  --dashboardFooterBackground: #d17d7b;
+  --dashboardFooterBackground: #d4d600;
 }

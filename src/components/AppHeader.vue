@@ -27,42 +27,26 @@
       </div>
       <CHeaderNav>
         <!-- <div style="color: black">AppHeader.vue file: one line testing</div> -->
-        <div
-          class="top-bar-cart-link"
-          style="margin: 3px 10px 0px 0px; color: var(--sideBarText)"
-          @click="$store.commit('toggleCartSidebar')"
-        >
-          <i class="icofont-cart-alt icofont-1x" style="margin-right: 0px"></i>
-          Cart ({{ totalQuantity }})
-        </div>
-
-        <CartSideBar v-if="$store.state.cartSidebarVisible" />
-
-        <AppHeaderDropdownAccnt
-          v-if="!$store.state.cartSidebarVisible"
-          style="margin-top: 3px"
-        />
+        <AppHeaderDropdownAccnt style="margin-top: 3px" />
       </CHeaderNav>
     </CContainer>
   </CHeader>
 </template>
 
 <script>
-import CartSideBar from '@/components/CartSideBar.vue'
 import AppHeaderDropdownAccnt from './AppHeaderDropdownAccnt'
 export default {
   name: 'AppHeader',
   components: {
     AppHeaderDropdownAccnt,
-    CartSideBar,
   },
   data() {
     return {}
   },
   computed: {
-    totalQuantity() {
-      return this.$store.getters.getTotalQuantity
-    },
+    // totalQuantity() {
+    //   return this.$store.getters.getTotalQuantity
+    // },
   },
   mounted() {},
 }

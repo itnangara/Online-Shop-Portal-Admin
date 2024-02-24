@@ -1,15 +1,5 @@
 <template>
-  <!-- <router-view /> -->
-  <!-- <div>
-    <div class="new">
-      <div style="color: black">App.vue file: one line testing</div>
-      <div class="top-bar-cart-link" @click="toggleSideBar">
-        <i class="icofont-cart-alt icofont-1x"></i>
-        <span>Cart ({{ totalQuantity }})</span>
-      </div>
-    </div> 
-  </div>-->
-  <router-view :inventory="inventory" :add-to-cart="addToCart" />
+  <router-view :inventory="inventory" />
 </template>
 
 <script>
@@ -33,26 +23,6 @@ export default {
         return acc + curr
       }, 0)
     },
-
-    cartTotal() {
-      let total = 0
-
-      for (const itemName in this.cart) {
-        if (Object.prototype.hasOwnProperty.call(this.cart, itemName)) {
-          const quantity = this.cart[itemName]
-          const item = this.inventory.find(
-            (product) => product.name === itemName,
-          )
-
-          if (item === true) {
-            const price = item.price.USD // Assuming you want to use USD price
-            const subtotal = quantity * price
-            total += subtotal
-          }
-        }
-      }
-      return total
-    },
   },
   mounted() {
     console.log('app.vue triggered')
@@ -63,45 +33,45 @@ export default {
   },
 
   methods: {
-    addToCart(name, quantity) {
-      console.log('name: ', name)
-      console.log('quantity: ', quantity)
-      if (quantity && quantity > 0) {
-        console.log('quantity value', quantity)
-        console.log('name value', name)
-        console.log('current total in cart')
+    // addToCart(name, quantity) {
+    //   console.log('name: ', name)
+    //   console.log('quantity: ', quantity)
+    //   if (quantity && quantity > 0) {
+    //     console.log('quantity value', quantity)
+    //     console.log('name value', name)
+    //     console.log('current total in cart')
 
-        if (!this.cart[name]) {
-          this.cart[name] = 0
-        }
+    //     if (!this.cart[name]) {
+    //       this.cart[name] = 0
+    //     }
 
-        if (isNaN(this.cart[name])) {
-          this.cart[name] = 0
-        }
+    //     if (isNaN(this.cart[name])) {
+    //       this.cart[name] = 0
+    //     }
 
-        this.cart[name] = this.cart[name] + quantity // 0 + 5
-        // this.quantity = 0
+    //     this.cart[name] = this.cart[name] + quantity // 0 + 5
+    //     // this.quantity = 0
 
-        console.log('cart name value', this.cart[name])
-        console.log('cart value', this.cart)
+    //     console.log('cart name value', this.cart[name])
+    //     console.log('cart value', this.cart)
 
-        const cartTotal = this.cartTotal
+    //     const cartTotal = this.cartTotal
 
-        // Log the cart total
-        console.log('Cart Total:', cartTotal)
+    //     // Log the cart total
+    //     console.log('Cart Total:', cartTotal)
 
-        // this.inventory[index].quantity = 0
+    //     // this.inventory[index].quantity = 0
 
-        this.totalAmountInCart = 0
-      }
-    },
+    //     this.totalAmountInCart = 0
+    //   }
+    // },
 
     toggleSideBar() {
       this.showSideBar = !this.showSideBar
     },
-    removeItem(name) {
-      delete this.cart[name]
-    },
+    // removeItem(name) {
+    //   delete this.cart[name]
+    // },
   },
 }
 </script>
@@ -111,6 +81,10 @@ export default {
 @import 'styles/style';
 </style>
 <style>
+.form-control:focus {
+  border-color: initial;
+  box-shadow: none;
+}
 .new {
   text-align: right;
   margin: 20px 40px;
