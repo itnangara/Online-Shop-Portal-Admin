@@ -62,7 +62,7 @@
                       <img
                         width="250px"
                         height="250px"
-                        :src="PhotoPath + PhotoFileName"
+                        :src="PhotoPath + image"
                       />
                       <input class="m-2" type="file" @change="imageUpload" />
                     </div>
@@ -453,9 +453,7 @@ export default {
       drawer: true,
       group: null,
       API_URL: 'http://127.0.0.1:8000/',
-      PhotoPath: 'http://127.0.0.1:8000/Photos/',
-      // PHOTO_URL:"http://127.0.0.1:8008/Photos/",
-
+      PhotoPath: '',
       // ddd:JSON.parse(JSON.stringify(response.data)),
 
       employeesWithoutFilter: [],
@@ -472,7 +470,8 @@ export default {
       EmployeeName: '',
       Department: '',
       DateOfJoining: '',
-      PhotoFileName: 'default_image.png',
+      image: 'default_image.png',
+      vvv: this.image,
 
       isLoading: true,
       loadingError: false,
@@ -488,7 +487,9 @@ export default {
     },
   },
   mounted() {
-    this.loadEmployees()
+    ;(this.PhotoPath = this.API_URL + 'static'),
+      console.log('Photo Path: ', this.PhotoPath),
+      this.loadEmployees()
   },
 
   methods: {
@@ -557,7 +558,7 @@ export default {
       this.EmployeeName = ''
       this.Department = ''
       this.DateOfJoining = ''
-      this.PhotoFileName = 'default_image.png'
+      this.image = 'default_image.png'
     },
 
     async createClick() {
@@ -566,7 +567,7 @@ export default {
       //   EmployeeName: this.EmployeeName,
       //   Department: this.Department,
       //   DateOfJoining: this.DateOfJoining,
-      //   PhotoFileName: this.PhotoFileName,
+      //   image: this.image,
       // })
 
       try {
@@ -574,7 +575,7 @@ export default {
           EmployeeName: this.EmployeeName,
           Department: this.Department,
           DateOfJoining: this.DateOfJoining,
-          PhotoFileName: this.PhotoFileName,
+          image: this.image,
         })
 
         if (response.status < 200 || response.status >= 300) {
@@ -596,7 +597,8 @@ export default {
       this.EmployeeName = emp.EmployeeName
       this.Department = emp.Department
       this.DateOfJoining = emp.DateOfJoining
-      this.PhotoFileName = emp.PhotoFileName
+      this.image = emp.image
+      console.log('my image: ', this.image)
     },
 
     async updateClick() {
@@ -607,7 +609,7 @@ export default {
           EmployeeName: this.EmployeeName,
           Department: this.Department,
           DateOfJoining: this.DateOfJoining,
-          PhotoFileName: this.PhotoFileName,
+          image: this.image,
         })
 
         if (response.status < 200 || response.status >= 300) {
@@ -653,7 +655,7 @@ export default {
         this.API_URL + 'employees/savefile',
         formData,
       )
-      this.PhotoFileName = response.data
+      this.image = response.data
     },
   },
 }
