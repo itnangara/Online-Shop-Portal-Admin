@@ -83,12 +83,14 @@
                     </div>
 
                     <div class="p-2 w-50 bd-highlight">
-                      <img
-                        width="250px"
-                        height="250px"
-                        :src="PhotoPath + image"
-                      />
                       <input class="m-2" type="file" @change="imageUpload" />
+                      <div>
+                        <img
+                          :src="PhotoPath + image"
+                          alt="Image"
+                          class="product-image"
+                        />
+                      </div>
                     </div>
 
                     <div style="float: right">
@@ -632,7 +634,7 @@
 // import avatar from '@/assets/images/avatars/avatar.png'
 import axios from 'axios'
 import 'datatables.net'
-import $ from 'jquery'
+//import $ from 'jquery'
 
 export default {
   name: 'Dashboard',
@@ -642,8 +644,7 @@ export default {
       group: null,
 
       API_URL: 'http://127.0.0.1:8000/',
-      PhotoPath: 'http://127.0.0.1:8000/Photos/',
-      // PHOTO_URL:"http://127.0.0.1:8008/Photos/",
+      PhotoPath: 'http://127.0.0.1:8000/static/',
 
       // ddd:JSON.parse(JSON.stringify(response.data)),
 
@@ -739,7 +740,7 @@ export default {
         this.isLoading = false
       }
 
-      $('#product').DataTable()
+      //$('#product').DataTable()
     },
 
     addClick() {
@@ -752,7 +753,8 @@ export default {
       this.sku = ''
       this.price = ''
       this.created_at = ''
-      this.image = 'default_image.png'
+      //this.image = 'default_image.png'
+      this.image = ''
       this.inventory = ''
     },
 
@@ -792,7 +794,7 @@ export default {
     },
 
     editClick(emp) {
-      console.log('welcome to edit 1')
+      console.log('welcome to edit 1', emp)
 
       this.modalTitle = 'Edit Product'
       this.product_id = emp.product_id
@@ -804,6 +806,7 @@ export default {
       this.created_at = emp.created_at
       this.image = emp.image
       this.inventory = emp.inventory
+      console.log('mmm: ', emp.image)
     },
 
     async updateClick() {
@@ -855,22 +858,31 @@ export default {
     },
 
     async imageUpload(event) {
-      console.log('file: ', event.target.files[0])
+      let file_name = event.target.files[0].name
+      this.image = file_name // updating the current modal instance name once there is a change
 
       let formData = new FormData()
-      formData.append('file', event.target.files[0])
+      formData.append('file', event.target.files[0]) // sending the whole file
 
-      let response = await axios.post(
-        this.API_URL + 'products/savefile',
-        formData,
-      )
-      this.image = response.data
+      try {
+        let response = await axios.post(
+          this.API_URL + 'products/savefile',
+          formData,
+        )
+        this.image = response.data // if error occurs this is skipped, image will remain pointing instance in modal
+      } catch (error) {
+        console.log('Error: ', error)
+      }
     },
   },
 }
 </script>
 
 <style scoped>
+.product-image {
+  width: auto; /* Set the desired width */
+  height: 250px; /* Maintain aspect ratio */
+}
 .form-control-- {
   border-width: 1px;
   border-color: var(--dashboardFooterBackground);

@@ -62,7 +62,7 @@
                       <img
                         width="250px"
                         height="250px"
-                        :src="PhotoPath + PhotoFileName"
+                        :src="PhotoPath + image"
                       />
                       <input class="m-2" type="file" @change="imageUpload" />
                     </div>
@@ -473,7 +473,7 @@ export default {
       EmployeeName: '',
       Department: '',
       DateOfJoining: '',
-      PhotoFileName: 'default_image.png',
+      image: 'default_image.png',
 
       isLoading: true,
       loadingError: false,
@@ -558,7 +558,7 @@ export default {
       this.EmployeeName = ''
       this.Department = ''
       this.DateOfJoining = ''
-      this.PhotoFileName = 'default_image.png'
+      this.image = 'default_image.png'
     },
 
     async createClick() {
@@ -567,7 +567,7 @@ export default {
       //   EmployeeName: this.EmployeeName,
       //   Department: this.Department,
       //   DateOfJoining: this.DateOfJoining,
-      //   PhotoFileName: this.PhotoFileName,
+      //   image: this.image,
       // })
 
       try {
@@ -575,7 +575,7 @@ export default {
           EmployeeName: this.EmployeeName,
           Department: this.Department,
           DateOfJoining: this.DateOfJoining,
-          PhotoFileName: this.PhotoFileName,
+          image: this.image,
         })
 
         if (response.status < 200 || response.status >= 300) {
@@ -597,7 +597,7 @@ export default {
       this.EmployeeName = emp.EmployeeName
       this.Department = emp.Department
       this.DateOfJoining = emp.DateOfJoining
-      this.PhotoFileName = emp.PhotoFileName
+      this.image = emp.image
     },
 
     async updateClick() {
@@ -608,7 +608,7 @@ export default {
           EmployeeName: this.EmployeeName,
           Department: this.Department,
           DateOfJoining: this.DateOfJoining,
-          PhotoFileName: this.PhotoFileName,
+          image: this.image,
         })
 
         if (response.status < 200 || response.status >= 300) {
@@ -654,7 +654,7 @@ export default {
         this.API_URL + 'employees/savefile',
         formData,
       )
-      this.PhotoFileName = response.data
+      this.image = response.data
     },
   },
 }
