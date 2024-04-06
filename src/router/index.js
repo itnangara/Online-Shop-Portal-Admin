@@ -27,8 +27,9 @@ const routes = [
       {
         path: '/settings',
         name: 'Settings',
-        component: () =>
-          import(/* webpackChunkName: "dashboard" */ '@/views/Settings.vue'),
+        /*component: () =>
+          import(webpackChunkName: "dashboard"  '@/views/Settings.vue'),
+          */
       },
     ],
   },
@@ -73,7 +74,7 @@ const routes = [
       {
         path: '/products/men',
         name: 'Men',
-        component: () => import('@/views/products/AllProducts'),
+        component: () => import('@/views/products/MenProducts'),
       },
     ],
   },

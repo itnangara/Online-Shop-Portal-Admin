@@ -8,16 +8,17 @@
       <div class="recommended">
         <!-- base modal -->
         <div
-          class="modal fade"
           id="exampleModal"
+          class="modal fade"
           tabindex="-1"
           aria-labelledby="exampleModalLabel"
           aria-hidden="true"
+          ref="myModal"
         >
           <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">
+                <h5 id="exampleModalLabel" class="modal-title">
                   {{ modalTitle }}
                 </h5>
                 <button
@@ -34,51 +35,51 @@
                     <div class="input-group mb-3">
                       <span class="input-group-text">Product Name</span>
                       <input
+                        v-model="product_name"
                         type="text"
                         class="form-control"
-                        v-model="product_name"
                       />
                     </div>
 
                     <div class="input-group mb-3">
                       <span class="input-group-text">Description</span>
                       <input
+                        v-model="description"
                         type="text"
                         class="form-control"
-                        v-model="description"
                       />
                     </div>
 
                     <div class="input-group mb-3">
                       <span class="input-group-text">Category</span>
                       <input
+                        v-model="category"
                         type="text"
                         class="form-control"
-                        v-model="category"
                       />
                     </div>
                     <div class="input-group mb-3">
                       <span class="input-group-text">SKU</span>
-                      <input type="text" class="form-control" v-model="sku" />
+                      <input v-model="sku" type="text" class="form-control" />
                     </div>
                     <div class="input-group mb-3">
                       <span class="input-group-text">Price</span>
-                      <input type="text" class="form-control" v-model="price" />
+                      <input v-model="price" type="text" class="form-control" />
                     </div>
                     <div class="input-group mb-3">
                       <span class="input-group-text">Date Created</span>
                       <input
+                        v-model="created_at"
                         type="date"
                         class="form-control"
-                        v-model="created_at"
                       />
                     </div>
                     <div class="input-group mb-3">
                       <span class="input-group-text">Inventory</span>
                       <input
+                        v-model="inventory"
                         type="text"
                         class="form-control"
-                        v-model="inventory"
                       />
                     </div>
 
@@ -95,19 +96,19 @@
 
                     <div style="float: right">
                       <base-button
-                        type="button"
-                        @click="createClick()"
                         v-if="product_id == 0"
+                        type="button"
                         class="btn btn-primary"
+                        @click="createClick()"
                       >
                         Create
                       </base-button>
 
                       <base-button
-                        type="button"
-                        @click="updateClick()"
                         v-if="product_id != 0"
+                        type="button"
                         class="btn btn-primary"
+                        @click="updateClick()"
                       >
                         Update
                       </base-button>
@@ -129,8 +130,8 @@
 
         <!-- delete confirmation modal -->
         <div
-          class="modal fade"
           id="deleteModal"
+          class="modal fade"
           tabindex="-1"
           aria-labelledby="deleteModalLabel"
           aria-hidden="true"
@@ -138,7 +139,7 @@
           <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">
+                <h5 id="deleteModalLabel" class="modal-title">
                   {{ modalTitle }}
                 </h5>
                 <button
@@ -158,10 +159,10 @@
 
                     <div style="float: right">
                       <base-button
-                        type="button"
-                        @click="confirmDelete()"
                         v-if="product_id == 0"
+                        type="button"
                         class="btn btn-primary"
+                        @click="confirmDelete()"
                       >
                         Yes, delete
                       </base-button>
@@ -183,7 +184,7 @@
 
         <side-bar></side-bar>
 
-        <div class="main-panel" id="main-panel">
+        <div id="main-panel" class="main-panel">
           <nav-bar></nav-bar>
 
           <base-card style="width: 100%">
@@ -206,8 +207,8 @@
               </button>
 
               <base-spinner
-                style="margin: auto"
                 v-if="isLoading"
+                style="margin: auto"
               ></base-spinner>
 
               <base-dialog
@@ -215,7 +216,7 @@
                 title="Error Occurred"
                 @close="errorHandling"
               >
-                <p class="error" v-if="loadingError">
+                <p v-if="loadingError" class="error">
                   Failed loading due to:
                   <strong>{{ loadingErrorMessage }}</strong> error
                 </p>
@@ -224,11 +225,11 @@
               <div>
                 <div style="margin-left: 70%">
                   <input
+                    v-model="productNameFilter"
                     class="form-control m-2"
                     style="width: 15rem"
-                    v-model="productNameFilter"
-                    v-on:keyup="FilterFn()"
                     placeholder="Search"
+                    @keyup="FilterFn()"
                   />
                 </div>
 
@@ -598,10 +599,10 @@
                         </button>
                         <button
                           type="button"
-                          @click="deleteClick(product.product_id)"
                           class="btn btn-light mr-1"
                           data-bs-toggle="modal"
                           data-bs-target="#deleteModal"
+                          @click="deleteClick(product.product_id)"
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -634,7 +635,8 @@
 // import avatar from '@/assets/images/avatars/avatar.png'
 import axios from 'axios'
 import 'datatables.net'
-//import $ from 'jquery'
+import $ from 'jquery'
+import 'bootstrap';
 
 export default {
   name: 'Dashboard',
@@ -667,6 +669,7 @@ export default {
       created_at: '',
       inventory: '',
       image: 'default_image.png',
+      modalVisibility: true,
 
       isLoading: true,
       loadingError: false,
@@ -686,6 +689,17 @@ export default {
   },
 
   methods: {
+    closeModal() {
+      // Access the modal element using $refs
+      const modal = this.$refs.myModal;
+      console.log('hey closeModal: ', modal)
+      
+      // Check if the modal element exists and has the hide method
+      if (modal) {
+        console.log('CloseModal exists')
+        $('#exampleModal').modal('hide');
+      }
+    },
     FilterFn() {
       var productIdFilter = this.productIdFilter
       var productNameFilter = this.productNameFilter
@@ -760,16 +774,16 @@ export default {
 
     async createClick() {
       console.log('welcome to create click')
-      //   console.log('Modal data: ', {
-      //     product_name: this.product_name,
-      //     description: this.description,
-      //     category: this.category,
-      //     sku: this.sku,
-      //     price: this.price,
-      //     created_at: this.created_at,
-      //     image: this.image,
-      //     inventory: this.inventory,
-      //   })
+        console.log('Modal data: ', {
+          product_name: this.product_name,
+          description: this.description,
+          category: this.category,
+          sku: this.sku,
+          price: this.price,
+          created_at: this.created_at,
+          image: this.image,
+          inventory: this.inventory,
+        })
 
       try {
         let response = await axios.post(this.API_URL + 'products', {
@@ -790,7 +804,17 @@ export default {
       } catch (error) {
         alert(error.message)
       }
+      // Get a reference to the modal element
+
+      //$('#exampleModal').modal('hide');
+      //window.$('#exampleModal').modal('hide')
+      //$(modal).modal('hide');
+
+
+      
+      this.modalVisibility=false
       this.loadProducts()
+      this.$router.push('/products/men')
     },
 
     editClick(emp) {
@@ -835,8 +859,14 @@ export default {
     },
 
     deleteClick(id) {
+      this.modalTitle = 'Delete Product'
       console.log('id: ', id)
       this.selectedId = id
+      //this.$store.state.modalVisibility = true
+      //console.log('modal visibility 1: ', this.$store.state.modalVisibility)
+      //this.$store.state.modalVisibility = false
+      console.log('modal visibility 2: ', this.$store.state.modalVisibility)
+      //modalVisibility
     },
 
     async confirmDelete() {

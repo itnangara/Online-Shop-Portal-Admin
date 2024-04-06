@@ -18,7 +18,7 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'vue/multi-word-component-names': 'off',
     'vue/html-indent': ['error', 2],
-    'prettier/prettier':0,
+    'prettier/prettier': 0,
     // 'vue/max-len': ['error', {` 'code'`: 100 }],
   },
   overrides: [
