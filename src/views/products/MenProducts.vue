@@ -8,17 +8,16 @@
       <div class="recommended">
         <!-- base modal -->
         <div
-          id="exampleModal"
+          id="uniModal"
           class="modal fade"
           tabindex="-1"
-          aria-labelledby="exampleModalLabel"
+          aria-labelledby="uniModalLabel"
           aria-hidden="true"
-          ref="myModal"
         >
           <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 id="exampleModalLabel" class="modal-title">
+                <h5 id="uniModalLabel" class="modal-title">
                   {{ modalTitle }}
                 </h5>
                 <button
@@ -199,8 +198,6 @@
                   border-color: green;
                   border-color: var(--dashboardFooterBackground);
                 "
-                data-bs-toggle="modal"
-                data-bs-target="#exampleModal"
                 @click="addClick()"
               >
                 Add Product
@@ -576,8 +573,6 @@
                         <button
                           type="button"
                           class="btn btn-light mr-1"
-                          data-bs-toggle="modal"
-                          data-bs-target="#exampleModal"
                           @click="editClick(product)"
                         >
                           <svg
@@ -600,8 +595,6 @@
                         <button
                           type="button"
                           class="btn btn-light mr-1"
-                          data-bs-toggle="modal"
-                          data-bs-target="#deleteModal"
                           @click="deleteClick(product.product_id)"
                         >
                           <svg
@@ -635,8 +628,8 @@
 // import avatar from '@/assets/images/avatars/avatar.png'
 import axios from 'axios'
 import 'datatables.net'
-import $ from 'jquery'
-import 'bootstrap';
+import * as bootstrap from 'bootstrap';
+
 
 export default {
   name: 'Dashboard',
@@ -669,7 +662,7 @@ export default {
       created_at: '',
       inventory: '',
       image: 'default_image.png',
-      modalVisibility: true,
+      modal: '',
 
       isLoading: true,
       loadingError: false,
@@ -689,16 +682,12 @@ export default {
   },
 
   methods: {
+    openModal(modalName) {
+      this.modal = new bootstrap.Modal(document.getElementById(modalName));
+      this.modal.show();
+    },
     closeModal() {
-      // Access the modal element using $refs
-      const modal = this.$refs.myModal;
-      console.log('hey closeModal: ', modal)
-      
-      // Check if the modal element exists and has the hide method
-      if (modal) {
-        console.log('CloseModal exists')
-        $('#exampleModal').modal('hide');
-      }
+      this.modal.hide()
     },
     FilterFn() {
       var productIdFilter = this.productIdFilter
@@ -756,8 +745,9 @@ export default {
 
       //$('#product').DataTable()
     },
-
+    
     addClick() {
+      this.openModal('uniModal')
       console.log('welcome to add')
       this.modalTitle = 'Add Product'
       this.product_id = 0
@@ -784,8 +774,14 @@ export default {
           image: this.image,
           inventory: this.inventory,
         })
-
+      
       try {
+        this.closeModal()
+
+        if(!this.created_at) {
+          const date = new Date();
+          this.created_at = date.toISOString().split('T')[0];
+        }
         let response = await axios.post(this.API_URL + 'products', {
           product_name: this.product_name,
           description: this.description,
@@ -804,22 +800,14 @@ export default {
       } catch (error) {
         alert(error.message)
       }
-      // Get a reference to the modal element
 
-      //$('#exampleModal').modal('hide');
-      //window.$('#exampleModal').modal('hide')
-      //$(modal).modal('hide');
-
-
-      
-      this.modalVisibility=false
       this.loadProducts()
-      this.$router.push('/products/men')
+      //this.$router.push('/products/men') // no need since its a modal being closed but in /products/men page
     },
 
     editClick(emp) {
       console.log('welcome to edit 1', emp)
-
+      this.openModal('uniModal')
       this.modalTitle = 'Edit Product'
       this.product_id = emp.product_id
       this.product_name = emp.product_name
@@ -836,6 +824,7 @@ export default {
     async updateClick() {
       console.log('welcome to edit 2')
       try {
+        this.closeModal()
         let response = await axios.put(this.API_URL + 'products', {
           product_id: this.product_id,
           product_name: this.product_name,
@@ -859,21 +848,17 @@ export default {
     },
 
     deleteClick(id) {
+      this.openModal('deleteModal')
       this.modalTitle = 'Delete Product'
       console.log('id: ', id)
       this.selectedId = id
-      //this.$store.state.modalVisibility = true
-      //console.log('modal visibility 1: ', this.$store.state.modalVisibility)
-      //this.$store.state.modalVisibility = false
-      console.log('modal visibility 2: ', this.$store.state.modalVisibility)
-      //modalVisibility
     },
 
     async confirmDelete() {
       let id = this.selectedId
       try {
+        this.closeModal()
         let response = await axios.delete(this.API_URL + 'products/' + id)
-
         this.loadProducts()
         this.selectedId = null
 
@@ -883,8 +868,7 @@ export default {
       } catch (error) {
         alert(error.message)
       }
-
-      this.$router.push('/products/men')
+      this.loadProducts()
     },
 
     async imageUpload(event) {
