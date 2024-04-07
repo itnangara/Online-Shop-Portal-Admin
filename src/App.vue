@@ -81,6 +81,16 @@ export default {
 @import 'styles/style';
 </style>
 <style>
+.auth-header {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+.text-field {
+  border: none;
+  border-bottom: 1px solid gray;
+  padding: 0.5em;
+  width: 90%;
+}
 .form-control:focus {
   border-color: initial;
   box-shadow: none;

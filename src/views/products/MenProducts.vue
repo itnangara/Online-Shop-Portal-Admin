@@ -181,8 +181,6 @@
           </div>
         </div>
 
-        <side-bar></side-bar>
-
         <div id="main-panel" class="main-panel">
           <nav-bar></nav-bar>
 

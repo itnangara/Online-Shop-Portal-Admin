@@ -1,22 +1,66 @@
 import { h, resolveComponent } from 'vue'
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 import DefaultLayout from '@/layouts/DefaultLayout'
+// import RegistrationAuth from '@/components/auth/RegistrationAuth.vue'
 
 const routes = [
+  {
+    path: '/auth',
+    //component: DefaultLayout,
+    redirect: '/',
+    name: 'auth',
+    children: [
+      {
+        path: '/auth/register',
+        name: 'Register',
+        component: () => import('@/components/auth/RegistrationAuth.vue'),
+      },
+      {
+        path: '/auth/login',
+        name: 'Login',
+        component: () => import('@/components/auth/LoginAuth.vue'),
+      },
+    ],
+  },
   {
     path: '/',
     name: 'Home',
     component: DefaultLayout,
-    redirect: '/dashboard',
+    //redirect: '/dashboard',
     children: [
       {
         path: '/dashboard',
         name: 'Dashboard',
         component: () =>
-          import(/* webpackChunkName: "dashboard" */ '@/views/Dashboard.vue'),
+          import(/* webpackChunkName: "dashboard" */ '@/views/Dashboard'),
       },
     ],
+  },
+  {
+    path: '/login',
+    name: 'login',
+    meta: { requiresAuth: true },
+    component: () =>
+      import(/* webpackChunkName: "dashboard" */ '@/components/auth/LoginAuth'),
+  },
+  {
+    path: '/logout',
+    name: 'logout',
+    meta: { requiresAuth: true },
+    component: () =>
+      import(
+        /* webpackChunkName: "dashboard" */ '@/components/auth/LogoutAuth'
+      ),
+  },
+  {
+    path: '/logintest',
+    name: 'logintest',
+    //meta: { requiresAuth: true },
+    component: () =>
+      import(
+        /* webpackChunkName: "dashboard" */ '@/components/auth/LogoutAuth'
+      ),
   },
   {
     path: '/settings',
@@ -27,9 +71,7 @@ const routes = [
       {
         path: '/settings',
         name: 'Settings',
-        /*component: () =>
-          import(webpackChunkName: "dashboard"  '@/views/Settings.vue'),
-          */
+        component: () => import('@/views/Settings.vue'),
       },
     ],
   },
@@ -52,16 +94,6 @@ const routes = [
         path: '500',
         name: 'Page500',
         component: () => import('@/views/pages/Page500'),
-      },
-      {
-        path: 'login',
-        name: 'Login',
-        component: () => import('@/views/pages/Login'),
-      },
-      {
-        path: 'register',
-        name: 'Register',
-        component: () => import('@/views/pages/Register'),
       },
     ],
   },
@@ -88,15 +120,10 @@ const routes = [
   //   name: 'Account',
   //   component: () => import('@/views/AccountSettings'),
   // },
-  // {
-  //   path: '/logout',
-  //   name: 'Logout',
-  //   component: () => import('@/views/pages/Login'),
-  // },
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(process.env.BASE_URL),
+  history: createWebHistory(process.env.BASE_URL),
   routes,
   scrollBehavior() {
     // always scroll to top
