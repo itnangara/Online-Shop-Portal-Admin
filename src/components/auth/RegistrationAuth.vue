@@ -208,7 +208,7 @@ export default {
 
 <style scoped>
 body {
-  <--background-image: url('@/assets/images/vue.jpg');
+  --background-image: url('@/assets/images/vue.jpg');
   background-size: cover;
 }
 

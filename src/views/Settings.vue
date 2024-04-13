@@ -8,8 +8,8 @@
       <div class="recommended">
         <!-- base modal -->
         <div
-          class="modal fade"
           id="exampleModal"
+          class="modal fade"
           tabindex="-1"
           aria-labelledby="exampleModalLabel"
           aria-hidden="true"

@@ -9,21 +9,21 @@
         <!-- base modal -->
         <div
           class="modal fade"
-          id="exampleModal"
+          id="uniModal"
           tabindex="-1"
-          aria-labelledby="exampleModalLabel"
+          aria-labelledby="uniModalLabel"
           aria-hidden="true"
         >
           <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">
+                <h5 class="modal-title" id="uniModalLabel">
                   {{ modalTitle }}
                 </h5>
                 <button
                   type="button"
                   class="btn-close"
-                  data-bs-dismiss="modal"
+                  @click="closeModal()"
                   aria-label="Close"
                 ></button>
               </div>
@@ -59,12 +59,14 @@
                     </div>
 
                     <div class="p-2 w-50 bd-highlight">
-                      <img
-                        width="250px"
-                        height="250px"
-                        :src="PhotoPath + image"
-                      />
                       <input class="m-2" type="file" @change="imageUpload" />
+                      <div>
+                        <img
+                          :src="PhotoPath + Image"
+                          alt="Image"
+                          class="employee-image"
+                        />
+                      </div>
                     </div>
 
                     <div style="float: right">
@@ -88,7 +90,7 @@
 
                       <base-button
                         type="button"
-                        data-bs-dismiss="modal"
+                        @click="closeModal()"
                         style="margin-left: 10px"
                       >
                         Cancel
@@ -118,7 +120,7 @@
                 <button
                   type="button"
                   class="btn-close"
-                  data-bs-dismiss="modal"
+                  @click="closeModal()"
                   aria-label="Close"
                 ></button>
               </div>
@@ -134,7 +136,6 @@
                       <base-button
                         type="button"
                         @click="confirmDelete()"
-                        v-if="EmployeeId == 0"
                         class="btn btn-primary"
                       >
                         Yes, delete
@@ -142,7 +143,7 @@
 
                       <base-button
                         type="button"
-                        data-bs-dismiss="modal"
+                        @click="closeModal()"
                         style="margin-left: 10px"
                       >
                         Cancel
@@ -168,8 +169,6 @@
                   border-color: green;
                   border-color: var(--dashboardFooterBackground);
                 "
-                data-bs-toggle="modal"
-                data-bs-target="#exampleModal"
                 @click="addClick()"
               >
                 Add Admin
@@ -385,8 +384,6 @@
                         <button
                           type="button"
                           class="btn btn-light mr-1"
-                          data-bs-toggle="modal"
-                          data-bs-target="#exampleModal"
                           @click="editClick(employee)"
                         >
                           <svg
@@ -408,10 +405,8 @@
                         </button>
                         <button
                           type="button"
-                          @click="deleteClick(employee.EmployeeId)"
                           class="btn btn-light mr-1"
-                          data-bs-toggle="modal"
-                          data-bs-target="#deleteModal"
+                          @click="deleteClick(employee.EmployeeId)"
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -444,7 +439,8 @@
 // import avatar from '@/assets/images/avatars/avatar.png'
 import axios from 'axios'
 import 'datatables.net'
-import $ from 'jquery'
+import * as bootstrap from 'bootstrap'
+// import $ from 'jquery'
 
 export default {
   name: 'Dashboard',
@@ -470,8 +466,9 @@ export default {
       EmployeeName: '',
       Department: '',
       DateOfJoining: '',
-      image: 'default_image.png',
-      vvv: this.image,
+      Image: 'default_image.png',
+      modal: '',
+      //vvv: this.Image,
 
       isLoading: true,
       loadingError: false,
@@ -487,12 +484,33 @@ export default {
     },
   },
   mounted() {
-    ;(this.PhotoPath = this.API_URL + 'static'),
-      console.log('Photo Path: ', this.PhotoPath),
-      this.loadEmployees()
+    console.log("emp id: ", this.EmployeeId)
+    this.initializeProperties()
+    this.loadEmployees()
   },
 
   methods: {
+    openModal(modalName) {
+      console.log("emp id: ", this.EmployeeId)
+
+      this.modal = new bootstrap.Modal(document.getElementById(modalName))
+      this.modal.show()
+    },
+    closeModal() {
+      this.resetProperties()
+      this.modal.hide()
+    },
+    initializeProperties() {
+      this.PhotoPath = this.API_URL + 'static/'
+    },
+    resetProperties() {
+      this.modalTitle = 'Add Employee'
+      this.EmployeeId = 0
+      this.EmployeeName = ''
+      this.Department = ''
+      this.DateOfJoining = ''
+      this.Image = 'default_image.png'
+    },
     FilterFn() {
       var employeeIdFilter = this.employeeIdFilter
       var employeeNameFilter = this.employeeNameFilter
@@ -546,59 +564,45 @@ export default {
 
         this.isLoading = false
       }
-
-      $('#employee').DataTable()
     },
 
     addClick() {
-      console.log('welcome to add')
-
-      this.modalTitle = 'Add Employee'
-      this.EmployeeId = 0
-      this.EmployeeName = ''
-      this.Department = ''
-      this.DateOfJoining = ''
-      this.image = 'default_image.png'
+      this.resetProperties()
+      this.openModal('uniModal')
     },
 
     async createClick() {
-      console.log('welcome to create click')
-      // console.log('Modal data: ', {
-      //   EmployeeName: this.EmployeeName,
-      //   Department: this.Department,
-      //   DateOfJoining: this.DateOfJoining,
-      //   image: this.image,
-      // })
-
       try {
+        if (!this.DateOfJoining) {
+          const date = new Date()
+          this.DateOfJoining = date.toISOString().split('T')[0]
+        }
         let response = await axios.post(this.API_URL + 'employees', {
           EmployeeName: this.EmployeeName,
           Department: this.Department,
           DateOfJoining: this.DateOfJoining,
-          image: this.image,
+          Image: this.Image,
         })
 
         if (response.status < 200 || response.status >= 300) {
           alert('error occurred')
-          // return
-        } else {
-          this.loadEmployees()
         }
       } catch (error) {
         alert(error.message)
       }
+      this.closeModal()
+      this.loadEmployees()
     },
 
     editClick(emp) {
-      console.log('welcome to edit 1')
-
+      this.openModal('uniModal')
       this.modalTitle = 'Edit Employee'
       this.EmployeeId = emp.EmployeeId
       this.EmployeeName = emp.EmployeeName
       this.Department = emp.Department
       this.DateOfJoining = emp.DateOfJoining
-      this.image = emp.image
-      console.log('my image: ', this.image)
+      this.Image = emp.Image
+      console.log('my image: ', this.Image)
     },
 
     async updateClick() {
@@ -609,20 +613,24 @@ export default {
           EmployeeName: this.EmployeeName,
           Department: this.Department,
           DateOfJoining: this.DateOfJoining,
-          image: this.image,
+          Image: this.Image,
         })
-
+        
         if (response.status < 200 || response.status >= 300) {
           alert('error occurred')
           // return
         }
-        this.loadEmployees()
       } catch (error) {
         alert(error.message)
       }
+      this.closeModal()
+      this.loadEmployees()
     },
 
     deleteClick(id) {
+      this.openModal('deleteModal')
+      this.modalTitle = 'Delete Employee'
+
       console.log('id: ', id)
       this.selectedId = id
     },
@@ -631,37 +639,56 @@ export default {
       let id = this.selectedId
       try {
         let response = await axios.delete(this.API_URL + 'employees/' + id)
-
-        this.loadEmployees()
         this.selectedId = null
-
         if (response.status < 200 || response.status >= 300) {
           alert('error occurred')
         }
       } catch (error) {
         alert(error.message)
-      }
-
-      this.$router.push('/admins')
+      }      
+      this.closeModal()
+      this.loadEmployees()
     },
 
     async imageUpload(event) {
-      console.log('file: ', event.target.files[0])
+      let file_name = event.target.files[0].name
+      this.Image = file_name // updating the current modal instance name once there is a change
 
       let formData = new FormData()
-      formData.append('file', event.target.files[0])
+      formData.append('file', event.target.files[0]) // sending the whole file
 
-      let response = await axios.post(
-        this.API_URL + 'employees/savefile',
-        formData,
-      )
-      this.image = response.data
+      try {
+        let response = await axios.post(
+          this.API_URL + 'employees/savefile',
+          formData,
+        )
+        this.Image = response.data // if error occurs this is skipped, image will remain pointing instance in modal
+      } catch (error) {
+        console.log('Error: ', error)
+      }
     },
+
+    // async imageUpload(event) {
+    //   console.log('file: ', event.target.files[0])
+
+    //   let formData = new FormData()
+    //   formData.append('file', event.target.files[0])
+
+    //   let response = await axios.post(
+    //     this.API_URL + 'employees/savefile',
+    //     formData,
+    //   )
+    //   this.Image = response.data
+    // },
   },
 }
 </script>
 
 <style scoped>
+.employee-image {
+  width: auto; /* Set the desired width */
+  height: 250px; /* Maintain aspect ratio */
+}
 .form-control-- {
   border-width: 1px;
   border-color: var(--dashboardFooterBackground);

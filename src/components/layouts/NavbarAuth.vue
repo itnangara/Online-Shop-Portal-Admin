@@ -2,7 +2,7 @@
   <div class="navBarAuth">
     <div class="navBarContent" style="margin-top: 20px">
       <!-- <router-link style="border-color: transparent;" to="/employees"> -->
-      <h4>Loan Management System</h4>
+      <h4>Online Shop: Logo</h4>
       <!-- </router-link> -->
 
       <div>

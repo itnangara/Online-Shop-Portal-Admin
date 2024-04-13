@@ -23,7 +23,7 @@
                 <button
                   type="button"
                   class="btn-close"
-                  data-bs-dismiss="modal"
+                  @click="closeModal()"
                   aria-label="Close"
                 ></button>
               </div>
@@ -114,7 +114,7 @@
 
                       <base-button
                         type="button"
-                        data-bs-dismiss="modal"
+                        @click="closeModal()"
                         style="margin-left: 10px"
                       >
                         Cancel
@@ -144,7 +144,7 @@
                 <button
                   type="button"
                   class="btn-close"
-                  data-bs-dismiss="modal"
+                  @click="closeModal()"
                   aria-label="Close"
                 ></button>
               </div>
@@ -168,7 +168,7 @@
 
                       <base-button
                         type="button"
-                        data-bs-dismiss="modal"
+                        @click="closeModal()" 
                         style="margin-left: 10px"
                       >
                         Cancel
@@ -626,8 +626,7 @@
 // import avatar from '@/assets/images/avatars/avatar.png'
 import axios from 'axios'
 import 'datatables.net'
-import * as bootstrap from 'bootstrap';
-
+import * as bootstrap from 'bootstrap'
 
 export default {
   name: 'Dashboard',
@@ -637,9 +636,7 @@ export default {
       group: null,
 
       API_URL: 'http://127.0.0.1:8000/',
-      PhotoPath: 'http://127.0.0.1:8000/static/',
-
-      // ddd:JSON.parse(JSON.stringify(response.data)),
+      PhotoPath: '',
 
       productsWithoutFilter: [],
       products: [],
@@ -676,16 +673,33 @@ export default {
     },
   },
   mounted() {
+    this.initialize_properties()
     this.loadProducts()
   },
 
   methods: {
     openModal(modalName) {
-      this.modal = new bootstrap.Modal(document.getElementById(modalName));
-      this.modal.show();
+      this.modal=new bootstrap.Modal(document.getElementById(modalName))
+      this.modal.show()
     },
     closeModal() {
+      this.resetProperties()
       this.modal.hide()
+    },
+    initialize_properties() {
+      this.PhotoPath=this.API_URL + 'static/'
+    },
+    resetProperties() {
+      this.modalTitle = 'Add Product'
+      this.product_id = 0
+      this.product_name = ''
+      this.description = ''
+      this.category = ''
+      this.sku = ''
+      this.price = ''
+      this.created_at = ''
+      this.image = 'default_image.png' // to be changed, a real product image should be added all the time
+      this.inventory = ''
     },
     FilterFn() {
       var productIdFilter = this.productIdFilter
@@ -707,7 +721,6 @@ export default {
         )
       })
     },
-
     sortFn(prop, asc) {
       this.products = this.productsWithoutFilter.sort(function (a, b) {
         if (asc) {
@@ -717,12 +730,10 @@ export default {
         }
       })
     },
-
     errorHandling() {
       this.showLoadingErrorDialog = false
       this.loadingErrorMessage = null
     },
-
     async loadProducts() {
       try {
         let response = await axios.get(this.API_URL + 'products')
@@ -743,42 +754,15 @@ export default {
 
       //$('#product').DataTable()
     },
-    
     addClick() {
+      this.resetProperties()
       this.openModal('uniModal')
-      console.log('welcome to add')
-      this.modalTitle = 'Add Product'
-      this.product_id = 0
-      this.product_name = ''
-      this.description = ''
-      this.category = ''
-      this.sku = ''
-      this.price = ''
-      this.created_at = ''
-      //this.image = 'default_image.png'
-      this.image = ''
-      this.inventory = ''
     },
-
     async createClick() {
-      console.log('welcome to create click')
-        console.log('Modal data: ', {
-          product_name: this.product_name,
-          description: this.description,
-          category: this.category,
-          sku: this.sku,
-          price: this.price,
-          created_at: this.created_at,
-          image: this.image,
-          inventory: this.inventory,
-        })
-      
       try {
-        this.closeModal()
-
-        if(!this.created_at) {
-          const date = new Date();
-          this.created_at = date.toISOString().split('T')[0];
+        if (!this.created_at) {
+          const date = new Date()
+          this.created_at = date.toISOString().split('T')[0]
         }
         let response = await axios.post(this.API_URL + 'products', {
           product_name: this.product_name,
@@ -790,21 +774,23 @@ export default {
           image: this.image,
           inventory: this.inventory,
         })
-
+        
         if (response.status < 200 || response.status >= 300) {
           alert('error occurred')
           // return
+        } else {
+          this.loadProducts()
         }
       } catch (error) {
         alert(error.message)
       }
-
+      
+      this.closeModal()
       this.loadProducts()
       //this.$router.push('/products/men') // no need since its a modal being closed but in /products/men page
     },
 
     editClick(emp) {
-      console.log('welcome to edit 1', emp)
       this.openModal('uniModal')
       this.modalTitle = 'Edit Product'
       this.product_id = emp.product_id
@@ -816,13 +802,10 @@ export default {
       this.created_at = emp.created_at
       this.image = emp.image
       this.inventory = emp.inventory
-      console.log('mmm: ', emp.image)
     },
 
     async updateClick() {
-      console.log('welcome to edit 2')
       try {
-        this.closeModal()
         let response = await axios.put(this.API_URL + 'products', {
           product_id: this.product_id,
           product_name: this.product_name,
@@ -834,17 +817,18 @@ export default {
           inventory: this.inventory,
           image: this.image,
         })
-
+        
         if (response.status < 200 || response.status >= 300) {
           alert('error occurred')
           // return
         }
-        this.loadProducts()
       } catch (error) {
         alert(error.message)
       }
+      this.closeModal()
+      this.loadProducts()
     },
-
+    
     deleteClick(id) {
       this.openModal('deleteModal')
       this.modalTitle = 'Delete Product'
@@ -855,20 +839,19 @@ export default {
     async confirmDelete() {
       let id = this.selectedId
       try {
-        this.closeModal()
         let response = await axios.delete(this.API_URL + 'products/' + id)
-        this.loadProducts()
         this.selectedId = null
-
+        
         if (response.status < 200 || response.status >= 300) {
           alert('error occurred')
         }
       } catch (error) {
         alert(error.message)
       }
+      this.closeModal()
       this.loadProducts()
     },
-
+    
     async imageUpload(event) {
       let file_name = event.target.files[0].name
       this.image = file_name // updating the current modal instance name once there is a change
