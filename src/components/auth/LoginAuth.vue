@@ -113,14 +113,6 @@ export default {
   },
   methods: {
     async login() {
-      {
-        // {
-        //   let email = this.email;
-        //   let password = this.password;
-        //   console.log('results: ', email, '', password);
-        // }
-      }
-
       let data = {
         email: this.email,
         password: this.password,

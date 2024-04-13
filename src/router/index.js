@@ -13,12 +13,12 @@ const routes = [
     children: [
       {
         path: '/auth/register',
-        name: 'Register',
+        name: 'register',
         component: () => import('@/components/auth/RegistrationAuth.vue'),
       },
       {
         path: '/auth/login',
-        name: 'Login',
+        name: 'login',
         component: () => import('@/components/auth/LoginAuth.vue'),
       },
     ],
@@ -31,18 +31,11 @@ const routes = [
     children: [
       {
         path: '/dashboard',
-        name: 'Dashboard',
+        name: 'dashboard',
         component: () =>
           import(/* webpackChunkName: "dashboard" */ '@/views/Dashboard'),
       },
     ],
-  },
-  {
-    path: '/login',
-    name: 'login',
-    meta: { requiresAuth: true },
-    component: () =>
-      import(/* webpackChunkName: "dashboard" */ '@/components/auth/LoginAuth'),
   },
   {
     path: '/logout',
@@ -64,13 +57,13 @@ const routes = [
   },
   {
     path: '/settings',
-    name: 'Settings',
+    name: 'settings',
     component: DefaultLayout,
     redirect: '/settings',
     children: [
       {
         path: '/settings',
-        name: 'Settings',
+        name: 'settings',
         component: () => import('@/views/Settings.vue'),
       },
     ],
@@ -78,7 +71,7 @@ const routes = [
   {
     path: '/pages',
     redirect: '/pages/404',
-    name: 'Pages',
+    name: 'pages',
     component: {
       render() {
         return h(resolveComponent('router-view'))
@@ -92,7 +85,7 @@ const routes = [
       },
       {
         path: '500',
-        name: 'Page500',
+        name: 'page500',
         component: () => import('@/views/pages/Page500'),
       },
     ],
@@ -101,11 +94,11 @@ const routes = [
     path: '/products',
     component: DefaultLayout,
     redirect: '/',
-    name: 'Products',
+    name: 'products',
     children: [
       {
         path: '/products/men',
-        name: 'Men',
+        name: 'men',
         component: () => import('@/views/products/MenProducts'),
       },
     ],

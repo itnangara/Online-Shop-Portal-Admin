@@ -12,15 +12,24 @@
 
           <div class="form-group">
             <input
-              v-model="fullName"
+              v-model="firstName"
               type="text"
-              name="fullName"
-              id="fullName"
+              name="firstName"
+              id="firstName"
               class="text-field"
-              placeholder="Full Name"
+              placeholder="First Name"
             />
           </div>
-
+          <div class="form-group">
+            <input
+              v-model="lastName"
+              type="text"
+              name="lastName"
+              id="lastName"
+              class="text-field"
+              placeholder="Last Name"
+            />
+          </div>
           <div class="form-group">
             <input
               v-model="email"
@@ -31,18 +40,6 @@
               placeholder="Email"
             />
           </div>
-
-          <div class="form-group">
-            <input
-              v-model="companyName"
-              type="text"
-              name="companyName"
-              id="companyName"
-              class="text-field"
-              placeholder="Company Name"
-            />
-          </div>
-
           <div class="form-group">
             <input
               v-model="password"
@@ -53,7 +50,6 @@
               placeholder="Password"
             />
           </div>
-
           <div class="form-group">
             <input
               v-model="confirmPassword"
@@ -85,8 +81,8 @@ export default {
   components: { NavbarAuth },
   data() {
     return {
-      fullName: '',
-      companyName: '',
+      firstName: '',
+      lastName: '',
       email: '',
       password: '',
 
@@ -109,16 +105,16 @@ export default {
       // this.error = null;
 
       {
-        // let fullName = this.fullName;
-        // let companyName = this.companyName;
+        // let firstName = this.firstName;
+        // let lastName = this.lastName;
         // let email = this.email;
         // let password = this.password;
-        // console.log('results: ', fullName, '', companyName, '', email, '', password);
+        // console.log('results: ', firstName, '', lastName, '', email, '', password);
       }
 
       let data = {
-        full_name: this.fullName,
-        company_name: this.companyName,
+        first_name: this.firstName,
+        last_name: this.lastName,
         email: this.email,
         password: this.password,
       }
