@@ -10,7 +10,7 @@
       <CDropdownItem> <CIcon icon="cil-user" /> Profile </CDropdownItem>
       <CDropdownItem> <CIcon icon="cil-settings" /> Settings </CDropdownItem>
       <CDropdownDivider />
-      <CDropdownItem> <CIcon icon="cil-lock-locked" /> Logout </CDropdownItem>
+      <CDropdownItem @click="logout()"> <CIcon icon="cil-lock-locked" /> Logout </CDropdownItem>
     </CDropdownMenu>
   </CDropdown>
 </template>
@@ -24,5 +24,10 @@ export default {
       avatar: avatar,
     }
   },
+  methods: {
+    async logout() {
+      await this.$store.dispatch('userLogout')
+    }
+  }
 }
 </script>

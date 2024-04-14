@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import DefaultLayout from '@/layouts/DefaultLayout'
 // import RegistrationAuth from '@/components/auth/RegistrationAuth.vue'
+//import store from '@/store/index';
 
 const routes = [
   {
@@ -27,7 +28,8 @@ const routes = [
     path: '/',
     name: 'Home',
     component: DefaultLayout,
-    //redirect: '/dashboard',
+    redirect: '/dashboard',
+    meta: { requiresAuth: true },
     children: [
       {
         path: '/dashboard',
@@ -59,7 +61,8 @@ const routes = [
     path: '/settings',
     name: 'settings',
     component: DefaultLayout,
-    redirect: '/settings',
+    meta: { requiresAuth: true },
+    //redirect: '/settings',
     children: [
       {
         path: '/settings',
@@ -77,6 +80,7 @@ const routes = [
         return h(resolveComponent('router-view'))
       },
     },
+    meta: { requiresAuth: true },
     children: [
       {
         path: '404',
@@ -92,9 +96,10 @@ const routes = [
   },
   {
     path: '/products',
-    component: DefaultLayout,
-    redirect: '/',
     name: 'products',
+    component: DefaultLayout,
+    meta: { requiresAuth: true },
+    redirect: '/',
     children: [
       {
         path: '/products/men',
@@ -123,5 +128,23 @@ const router = createRouter({
     return { top: 0 }
   },
 })
+
+// Auth 
+// Using a Guard for restricting pages with no Auth/Permissions (checked through tokens)
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    const accessToken = localStorage.getItem('accessToken');
+    if (!accessToken) { //!store.getters.isLoggedIn
+      // if the user is not authenticated
+      next({
+        name: 'login', // namepath: '/login',// query: { redirect: to.fullPath } // save the current route for after login
+      });
+    } else {
+      next(); // if the user is authenticated
+    }
+  } else {
+    next(); // if the route does not require authentication
+  }
+});
 
 export default router

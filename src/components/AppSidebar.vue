@@ -23,7 +23,7 @@
     <AppSidebarNav />
 
     <div class="logout-container">
-      <router-link to="" class="nav-link" @click="handleLogout">
+      <router-link to="" class="nav-link" @click="logout()">
         <i class="fa-solid fa-arrow-right-from-bracket"></i>
         <span>Log Out</span>
       </router-link>
@@ -57,8 +57,8 @@ export default {
     }
   },
   methods: {
-    handleLogout() {
-      console.log('logout functionality')
+    async logout() {
+      await this.$store.dispatch('userLogout')
     },
   },
 }

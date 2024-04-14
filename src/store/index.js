@@ -1,4 +1,11 @@
-import { createStore } from 'vuex'
+import { getAPI } from "../../axios-api";
+import { createStore } from 'vuex';
+import router from '@/router/index'; 
+
+// Router plugin
+const routerPlugin = (router) => (store) => {
+  store.$router = router;
+};
 
 export default createStore({
   state: {
@@ -8,8 +15,14 @@ export default createStore({
     sidebarUnfoldable: false,
     inventory: {},
     cartItems: {},
+    // Auth
+    accessToken: null,
+    refreshToken: null,
   },
   getters: {
+    isLoggedIn(state){
+      return state.accessToken != null
+    },
     getCartItems(state) {
       return state.cartItems
     },
@@ -23,6 +36,14 @@ export default createStore({
     },
   },
   mutations: {
+    updateStorage(state, { access, refresh }){
+      localStorage.setItem('accessToken', access);
+      localStorage.setItem('refreshToken', refresh);
+    },
+    destroyToken() {
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+    },
     toggleSidebar(state) {
       state.sidebarVisible = !state.sidebarVisible
     },
@@ -77,6 +98,37 @@ export default createStore({
     },
   },
   actions: {
+    async userLogin(context, data){
+        // console.log('userLogin Action: ', data.email, data.password);
+
+        let response = await getAPI.post('/api/login/', data);
+        console.log('Login action res: ', response.data);
+
+        context.commit('updateStorage', {
+          access: response.data.access,
+          refresh: response.data.refresh
+        })
+    },
+
+    async userRegistration(context, data){
+      console.log('user Reg Action');
+      try {
+        // let response = await getAPI.post('/api/register/', data);
+        let response = await getAPI.post('/api/register/', data);
+        console.log('Login action response: ', response.data);        
+        context.commit('updateStorage', {
+          access: response.data.access,
+          refresh: response.data.refresh
+        })
+      } catch (error) {
+        console.log('Login action response: ', error.message);
+        alert("Login Error has Occurred")  
+      }
+    },
+    async userLogout(context){
+        context.commit('destroyToken');
+        this.$router.push({ name: 'login' })
+    },
     loadProducts({ commit }, inventory) {
       console.log('loadProducts mutation: ', inventory)
       commit('loadProducts', inventory)
@@ -91,4 +143,5 @@ export default createStore({
     },
   },
   modules: {},
+  plugins: [routerPlugin(router)] 
 })
