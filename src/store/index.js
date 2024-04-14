@@ -109,7 +109,6 @@ export default createStore({
           refresh: response.data.refresh
         })
     },
-
     async userRegistration(context, data){
       console.log('user Reg Action');
       try {
