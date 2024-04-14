@@ -16,9 +16,8 @@
     url('./fonts/icofont.eot?#iefix') format('embedded-opentype'),
     url('./fonts/icofont.woff2') format('woff2'),
     url('./fonts/icofont.woff') format('woff'),
-    url('./fonts/icofont.ttf') format('truetype'),
-    url('./fonts/icofont.svg#icofont') format('svg');
-  // sass-lint:enable no-duplicate-properties indentation
+    url('./fonts/icofont.ttf') format('truetype');
+    // sass-lint:enable no-duplicate-properties indentation
 }
 
 [class^='icofont-'],
@@ -37,59 +36,6 @@
   word-wrap: normal;
   -webkit-font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
-}
-
-// sass-lint:disable brace-style
-.icofont-raddish:before {
-  content: '\eb8a';
-}
-.icofont-artichoke:before {
-  content: '\eb3d';
-}
-.icofont-broccoli:before {
-  content: '\eb48';
-}
-.icofont-cabbage:before {
-  content: '\eb4a';
-}
-.icofont-cherry:before {
-  content: '\eb4f';
-}
-.icofont-cart-alt:before {
-  content: '\eed1';
-}
-.icofont-carrot:before {
-  content: '\eb4b';
-}
-.icofont-corn:before {
-  content: '\eb5a';
-}
-.icofont-grapes:before {
-  content: '\eb6c';
-}
-.icofont-onion:before {
-  content: '\eb7c';
-}
-.icofont-orange:before {
-  content: '\eb7d';
-}
-.icofont-peas:before {
-  content: '\eb7f';
-}
-.icofont-pineapple:before {
-  content: '\eb83';
-}
-.icofont-steak:before {
-  content: '\eb93';
-}
-.icofont-watermelon:before {
-  content: '\eb9b';
-}
-.icofont-spoon-and-fork:before {
-  content: '\eb92';
-}
-.icofont-sausage:before {
-  content: '\eb8f';
 }
 
 .icofont-xs {

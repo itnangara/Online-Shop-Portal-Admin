@@ -190,8 +190,7 @@ template {
     url('./fonts/icofont.eot?#iefix') format('embedded-opentype'),
     url('./fonts/icofont.woff2') format('woff2'),
     url('./fonts/icofont.woff') format('woff'),
-    url('./fonts/icofont.ttf') format('truetype'),
-    url('./fonts/icofont.svg#icofont') format('svg');
+    url('./fonts/icofont.ttf') format('truetype');
 }
 [class^='icofont-'],
 [class*=' icofont-'] {
