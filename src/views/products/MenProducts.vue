@@ -202,7 +202,7 @@
               </button>
 
               <base-spinner
-                v-if="isLoading"
+                v-if="getSpinner"
                 style="margin: auto"
               ></base-spinner>
 
@@ -558,7 +558,7 @@
                   </thead>
 
                   <tbody>
-                    <tr v-for="product in products" :key="product.product_id">
+                    <tr v-for="product in getInventory" :key="product.product_id">
                       <td>{{ product.product_id }}</td>
                       <td>{{ product.product_name }}</td>
                       <td>{{ product.description }}</td>
@@ -659,13 +659,17 @@ export default {
       image: 'default_image.png',
       modal: '',
 
-      isLoading: true,
+      isLoading: false,
       loadingError: false,
       loadingErrorMessage: null,
       showLoadingErrorDialog: false,
 
       selectedId: null,
     }
+  },
+  computed: {
+    getInventory(){return this.$store.getters.getInventory},
+    getSpinner(){return this.$store.getters.getSpinner},
   },
   watch: {
     group() {
@@ -698,7 +702,7 @@ export default {
       this.sku = ''
       this.price = ''
       this.created_at = ''
-      this.image = 'default_image.png' // to be changed, a real product image should be added all the time
+      this.image = '' // to be changed, a real product image should be added all the time
       this.inventory = ''
     },
     FilterFn() {
@@ -736,60 +740,38 @@ export default {
     },
     async loadProducts() {
       try {
-        let response = await axios.get(this.API_URL + 'products')
-
-        this.isLoading = false
-        console.log('isaac res: ', response.data)
-
-        this.products = response.data
-        this.productsWithoutFilter = response.data
-      } catch (error) {
-        // alert(error.message)
-        this.loadingError = true
-        this.loadingErrorMessage = error.message
-        this.showLoadingErrorDialog = true
-
-        this.isLoading = false
+        await this.$store.dispatch('loadProducts')
+      } catch (err) {
+        alert(err.message)
       }
-
-      //$('#product').DataTable()
     },
     addClick() {
       this.resetProperties()
       this.openModal('uniModal')
     },
     async createClick() {
+      if (!this.created_at) {
+        const date = new Date()
+        this.created_at = date.toISOString().split('T')[0]
+      }
+      let data={
+        product_name: this.product_name,
+        description: this.description,
+        category: this.category,
+        sku: this.sku,
+        price: this.price,
+        created_at: this.created_at,
+        image: this.image,
+        inventory: this.inventory,
+      }
+
       try {
-        if (!this.created_at) {
-          const date = new Date()
-          this.created_at = date.toISOString().split('T')[0]
-        }
-        let response = await axios.post(this.API_URL + 'products', {
-          product_name: this.product_name,
-          description: this.description,
-          category: this.category,
-          sku: this.sku,
-          price: this.price,
-          created_at: this.created_at,
-          image: this.image,
-          inventory: this.inventory,
-        })
-        
-        if (response.status < 200 || response.status >= 300) {
-          alert('error occurred')
-          // return
-        } else {
-          this.loadProducts()
-        }
+        await this.$store.dispatch('createClick', data)
       } catch (error) {
         alert(error.message)
       }
-      
       this.closeModal()
-      this.loadProducts()
-      //this.$router.push('/products/men') // no need since its a modal being closed but in /products/men page
     },
-
     editClick(emp) {
       this.openModal('uniModal')
       this.modalTitle = 'Edit Product'
@@ -803,55 +785,40 @@ export default {
       this.image = emp.image
       this.inventory = emp.inventory
     },
-
     async updateClick() {
+      let data = {
+        product_id: this.product_id,
+        product_name: this.product_name,
+        description: this.description,
+        category: this.category,
+        sku: this.sku,
+        price: this.price,
+        created_at: this.created_at,
+        inventory: this.inventory,
+        image: this.image,
+      }
       try {
-        let response = await axios.put(this.API_URL + 'products', {
-          product_id: this.product_id,
-          product_name: this.product_name,
-          description: this.description,
-          category: this.category,
-          sku: this.sku,
-          price: this.price,
-          created_at: this.created_at,
-          inventory: this.inventory,
-          image: this.image,
-        })
-        
-        if (response.status < 200 || response.status >= 300) {
-          alert('error occurred')
-          // return
-        }
+        await this.$store.dispatch('updateClick', data)
       } catch (error) {
         alert(error.message)
       }
       this.closeModal()
-      this.loadProducts()
     },
-    
     deleteClick(id) {
       this.openModal('deleteModal')
       this.modalTitle = 'Delete Product'
       console.log('id: ', id)
       this.selectedId = id
     },
-
     async confirmDelete() {
       let id = this.selectedId
       try {
-        let response = await axios.delete(this.API_URL + 'products/' + id)
-        this.selectedId = null
-        
-        if (response.status < 200 || response.status >= 300) {
-          alert('error occurred')
-        }
+        await this.$store.dispatch('confirmDelete', id)
       } catch (error) {
         alert(error.message)
       }
       this.closeModal()
-      this.loadProducts()
     },
-    
     async imageUpload(event) {
       let file_name = event.target.files[0].name
       this.image = file_name // updating the current modal instance name once there is a change
@@ -861,8 +828,11 @@ export default {
 
       try {
         let response = await axios.post(
-          this.API_URL + 'products/savefile',
-          formData,
+          this.API_URL + 'products/savefile', formData, {
+            headers: {
+              Authorization: 'Bearer '+localStorage.getItem('accessToken')
+            }
+          }
         )
         this.image = response.data // if error occurs this is skipped, image will remain pointing instance in modal
       } catch (error) {

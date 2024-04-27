@@ -9,19 +9,32 @@ const routerPlugin = (router) => (store) => {
 
 export default createStore({
   state: {
-    sidebarVisible: '',
-    modalVisibility: '',
-    cartSidebarVisible: '',
-    sidebarUnfoldable: false,
-    inventory: {},
-    cartItems: {},
+    sidebarVisible:'',
+    modalVisibility:'',
+    cartSidebarVisible:'',
+    sidebarUnfoldable:false,
+    loadingError:true,
+    loadingErrorMessage:'',
+    isLoading:false,
+    showLoadingErrorDialog:true,
+    API_URL: getAPI.defaults.API_URL,
+
+    inventory:{},
+    cartItems:{},
     // Auth
     accessToken: null,
     refreshToken: null,
+    resource_token: null,
   },
   getters: {
     isLoggedIn(state){
       return state.accessToken != null
+    },
+    getSpinner(state){
+      return state.isLoading
+    },
+    getResourceToken(state){
+      return state.resource_token != null
     },
     getCartItems(state) {
       return state.cartItems
@@ -96,6 +109,15 @@ export default createStore({
         return acc + curr
       }, 0)
     },
+    // The following is a Hybrid for showing a temporary update on the frontend before reloading products from backend
+    // Not called by any method yet, as it is not working
+    updateProduct(state, updatedProduct) {
+      const index = state.inventory.findIndex(product => product.id === updatedProduct.id);
+      if (index !== -1) {
+        // Update the product in the array
+        state.inventory[index] = updatedProduct;
+      }
+    },
   },
   actions: {
     async userLogin(context, data){
@@ -112,15 +134,14 @@ export default createStore({
     async userRegistration(context, data){
       console.log('user Reg Action');
       try {
-        // let response = await getAPI.post('/api/register/', data);
         let response = await getAPI.post('/api/register/', data);
         console.log('Login action response: ', response.data);        
         context.commit('updateStorage', {
           access: response.data.access,
           refresh: response.data.refresh
         })
-      } catch (error) {
-        console.log('Login action response: ', error.message);
+      } catch (err) {
+        console.log('Login action response: ', err.message);
         alert("Login Error has Occurred")  
       }
     },
@@ -128,9 +149,72 @@ export default createStore({
         context.commit('destroyToken');
         this.$router.push({ name: 'login' })
     },
-    loadProducts({ commit }, inventory) {
-      console.log('loadProducts mutation: ', inventory)
-      commit('loadProducts', inventory)
+    async loadProducts({ commit , state}) {
+      console.log('loadProducts mutation: ', state.API_URL)
+      try {
+        state.isLoading = true
+        let response = await getAPI.get(state.API_URL + 'products', {
+          headers: {
+            Authorization: 'Bearer '+localStorage.getItem('accessToken')
+          }
+        })
+        console.log('isaac res: ', response.data)
+        commit('loadProducts', response.data)
+      } catch (err) {
+        state.isLoading = false
+        state.loadingError = true
+        state.loadingErrorMessage = err.message
+        state.showLoadingErrorDialog = true        
+        throw err
+      }
+      state.isLoading = false
+    },
+    async createClick({dispatch, state}, product) {
+      console.log("create prod: ", product)
+
+      try {
+        let response = await getAPI.post(state.API_URL + 'products', product,{
+          headers: {
+            Authorization: 'Bearer '+localStorage.getItem('accessToken')
+          }
+        })
+        console.log("response: ", response.data)
+      } catch (error) {
+        alert(error.message)
+      }
+      dispatch('loadProducts')
+    },
+    async updateClick({dispatch, state}, product) {
+      try {
+        let response = await getAPI.put(state.API_URL + 'products', product, {
+          headers: {
+            Authorization: 'Bearer '+localStorage.getItem('accessToken')
+          }
+        })
+        
+        if (response.status < 200 || response.status >= 300) {
+          alert('error occurred')
+        }
+      } catch (error) {
+        alert(error.message)
+      }
+      dispatch('loadProducts')
+    },
+    async confirmDelete({ dispatch, state }, id) {
+      try {
+        let response = await getAPI.delete(state.API_URL + 'products/' + id, {
+          headers: {
+            Authorization: 'Bearer '+localStorage.getItem('accessToken')
+          }
+        })
+        
+        if (response.status < 200 || response.status >= 300) {
+          alert('error occurred')
+        }
+      } catch (error) {
+        alert(error.message)
+      }
+      dispatch('loadProducts')
     },
     addToCart({ commit }, data) {
       console.log('addToCart action activated')
