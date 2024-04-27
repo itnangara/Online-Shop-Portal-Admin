@@ -21,26 +21,26 @@ export default {
 
 <style scoped>
 button {
-  background-color: #3a0061;
-  border: 1px solid #3a0061;
+  background-color: var(--seperateTopNavColor);
+  border: 1px solid var(--seperateTopNavColor);
   display: inline-block;
   border-radius: 1rem;
   padding: 0.3rem 1rem;
   color: white;
-  border: 2px solid #270041;
+  border: 2px solid var(--seperateTopNavColor);
   cursor: pointer;
 }
 
 /* active button for requests */
 .fill {
-  background-color: #270041;
+  background-color: var(--seperateTopNavColor);
 }
 
 /* buttons that are transparent like the contact button */
 .outline {
   background-color: transparent;
-  border-color: #270041;
-  color: #270041;
+  border-color: var(--seperateTopNavColor);
+  color: var(--seperateTopNavColor);
 }
 
 /* buttons for requests which are faded */
@@ -52,8 +52,8 @@ button {
 
 button:hover,
 button:active {
-  background-color: #270041;
-  border-color: #270041;
+  background-color: green;
+  border-color: green;
   color: white;
 }
 </style>

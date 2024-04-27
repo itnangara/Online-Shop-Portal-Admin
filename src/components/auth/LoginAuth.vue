@@ -161,7 +161,8 @@ input[type='password']:focus,
 
 .button {
   background-color: #40aadb;
-  background-color: #172455;
+  background-color: var(--seperateTopNavColor);
+  border-color: var(--seperateTopNavColor);
   margin-top: 1rem;
 }
 

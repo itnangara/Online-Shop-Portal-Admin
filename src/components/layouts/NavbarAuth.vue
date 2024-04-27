@@ -48,7 +48,7 @@ export default {
 .navBarAuth {
   background-color: #22283d;
   background-color: #172455;
-
+  background-color: var(--seperateTopNavColor);
   height: 90px;
   display: flex;
   align-items: center;

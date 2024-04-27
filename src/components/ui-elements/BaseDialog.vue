@@ -88,7 +88,7 @@ dialog {
 }
 
 header {
-  background-color: #3d008d;
+  background-color: var(--seperateTopNavColor);
   color: white;
   width: 100%;
   padding: 1rem;
